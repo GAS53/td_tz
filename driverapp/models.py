@@ -1,4 +1,3 @@
-from authapp.models import BaseUser
 from django.db import models
 from django.conf import settings
 
@@ -18,6 +17,8 @@ class DriverLog(models.Model):
     driver_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_id', default=0)
     company_id = models.ForeignKey(Company, on_delete=models.DO_NOTHING)
     status = models.ForeignKey(DriverStatus, on_delete=models.DO_NOTHING)
+    day = models.DateField(verbose_name='time now with status', default='1800-01-01')
+    time = models.SmallIntegerField(verbose_name='count ours with status', default=0)
 
     def __str__(self):
         return f"{self.first_name} ({self.last_name})"

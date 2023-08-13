@@ -6,7 +6,7 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField("first name", max_length=150)
     last_name = models.CharField("last name", max_length=150)
     email = models.EmailField("email address", unique=True)
-    birthday = models.PositiveIntegerField(verbose_name="birthday")
+    birthday = models.DateField(verbose_name="birthday")
     patronymic = models.CharField(verbose_name="patronymic", max_length=40, default="")
     password = models.CharField(verbose_name="password", max_length=40)
     create_date = models.DateTimeField(auto_now_add=True)
@@ -14,19 +14,20 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
     is_manager = models.BooleanField(default=False)
     is_driver = models.BooleanField(default=True)
 
+
     def __str__(self):
         return f"{self.first_name} ({self.last_name})"
     
     objects = UserManager()
 
     EMAIL_FIELD = "email"
-    USERNAME_FIELD = "first_name"
-    REQUIRED_FIELDS = ["email"]
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["first_name"]
 
     class Meta:
         verbose_name = "user"
         verbose_name_plural = "users"
-        abstract = True
+        abstract = False
 
     def clean(self):
         super().clean()
