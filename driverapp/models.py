@@ -1,5 +1,6 @@
 from authapp.models import BaseUser
 from django.db import models
+from django.conf import settings
 
 
 class Company(models.Model):
@@ -13,8 +14,8 @@ class DriverStatus(models.Model):
     description = models.CharField(verbose_name='description', max_length=200)
 
 
-class DriverLog(BaseUser):
-    driver_id = models.ForeignKey(BaseUser, on_delete=models.DO_NOTHING, related_name='user_id')
+class DriverLog(models.Model):
+    driver_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_id', default=0)
     company_id = models.ForeignKey(Company, on_delete=models.DO_NOTHING)
     status = models.ForeignKey(DriverStatus, on_delete=models.DO_NOTHING)
 
