@@ -1,6 +1,6 @@
 import calendar
 import datetime
-from random import choice
+from random import choice, SystemRandom
 
 from rest_framework.test import APIClient, APITestCase
 from django.urls import reverse
@@ -42,19 +42,25 @@ class GetDriverDayTestCase(APITestCase):
         calendar_ = calendar.Calendar(firstweekday=0)
         for day in calendar_.itermonthdates(now_year, self.month):
             for driver in self.drivers:
+                sys_random = SystemRandom()
                 DriverLog.objects.create(
                     driver_id=driver,
                     company_id=self.company,
                     status=choice(self.statuses),
-                    day=day,
+                    day=day.day,
+                    month=day.month,
                     time=choice(range(1, 9))
                 )
 
 
-            
-
     def test_get_days(self):
-        url = reverse('driver_api_v1:get_driver_day', args=[1,])
-        data = {'month': 2 }
+        url = reverse('driver_api_v1:get_driver_day', args=[self.drivers[1].id,])
+        data = {'month': self.month, 'day': 5}
         response = self.client.get(url, data=data)
-        print(response)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_month(self):
+        url = reverse('driver_api_v1:get_driver_day', args=[self.drivers[1].id,])
+        data = {'month': self.month}
+        response = self.client.get(url, data=data)
+        self.assertEqual(response.status_code, 200)

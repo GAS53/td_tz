@@ -20,7 +20,5 @@ class DriverLog(models.Model):
     status = models.ForeignKey(DriverStatus, on_delete=models.DO_NOTHING)
     day = models.SmallIntegerField(verbose_name='day now with status', default=0, validators=(MaxValueValidator(31), MinValueValidator(0)))
     month = models.SmallIntegerField(verbose_name='month now with status', default=0, validators=(MaxValueValidator(12), MinValueValidator(0)))
+    year = models.SmallIntegerField(verbose_name='year now with status', default=2000, validators=(MaxValueValidator(3000), MinValueValidator(2000)))
     time = models.SmallIntegerField(verbose_name='count ours with status', default=0, validators=(MaxValueValidator(24), MinValueValidator(0)))
-
-    def __str__(self):
-        return f"{self.first_name} ({self.last_name})"
