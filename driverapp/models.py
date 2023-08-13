@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Company(models.Model):
@@ -17,8 +18,9 @@ class DriverLog(models.Model):
     driver_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_id', default=0)
     company_id = models.ForeignKey(Company, on_delete=models.DO_NOTHING)
     status = models.ForeignKey(DriverStatus, on_delete=models.DO_NOTHING)
-    day = models.DateField(verbose_name='time now with status', default='1800-01-01')
-    time = models.SmallIntegerField(verbose_name='count ours with status', default=0)
+    day = models.SmallIntegerField(verbose_name='day now with status', default=0, validators=(MaxValueValidator(31), MinValueValidator(0)))
+    month = models.SmallIntegerField(verbose_name='month now with status', default=0, validators=(MaxValueValidator(12), MinValueValidator(0)))
+    time = models.SmallIntegerField(verbose_name='count ours with status', default=0, validators=(MaxValueValidator(24), MinValueValidator(0)))
 
     def __str__(self):
         return f"{self.first_name} ({self.last_name})"
