@@ -14,9 +14,9 @@ class DriverStatus(models.Model):
 
 
 class DriverLog(BaseUser):
-    driver_id = models.ForeignKey(BaseUser, on_delete=models.SET_NULL)
-    company_id = models.ForeignKey(Company, on_delete=models.SET_NULL)
-    status = models.ForeignKey(DriverStatus, on_delete=models.SET_DEFAULT, default='not activ')
+    driver_id = models.ForeignKey(BaseUser, on_delete=models.DO_NOTHING, related_name='user_id')
+    company_id = models.ForeignKey(Company, on_delete=models.DO_NOTHING)
+    status = models.ForeignKey(DriverStatus, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return f"{self.first_name} ({self.last_name})"
