@@ -14,6 +14,7 @@ class DriverStatus(models.Model):
 
 
 class DriverLog(BaseUser):
+    driver_id = models.ForeignKey(BaseUser, on_delete=models.SET_NULL)
     company_id = models.ForeignKey(Company, on_delete=models.SET_NULL)
     status = models.ForeignKey(DriverStatus, on_delete=models.SET_DEFAULT, default='not activ')
 
