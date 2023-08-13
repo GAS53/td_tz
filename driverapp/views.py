@@ -20,9 +20,11 @@ class DriverDayResult(APIView):
         month = request.query_params.get('month', None)
         day = request.query_params.get('month', None)
         
-        # if not month:
-        #     Response({'error':'need month'}, status=404)
-        # elif not day:
+        if not month:
+            Response({'error':'need month'}, status=404)
+        elif not day:
+            DriverLog.objects.filter(day)
+
 
 
 
