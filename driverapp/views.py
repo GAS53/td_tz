@@ -20,7 +20,6 @@ class DriverResult(APIView):
         year = request.query_params.get('year', now_year)
         month = request.query_params.get('month', None)
         day = request.query_params.get('day', None)
-        # print(f'y m d {year} {month} {day}')
 
         find_set = DriverLog.objects.filter(driver_id=driver_id)
         if not find_set:
@@ -29,20 +28,29 @@ class DriverResult(APIView):
             Response({'error': 'need month'}, status=404)
 
         find_set = find_set.filter(month=month)
+        
+        response = {}
+
         if day:
             find_set = find_set.filter(day=day)
 
-        response = {}
+        day_di = {}
         for i in find_set:
-            status_di = {}
-            for status in DriverStatus.objects.all():
-                if status_di.get(status.description):
-                    status_di[status.description] += i.time
+            if day:
+                if day_di.get(i.status.description):
+                    day_di[i.status.description] += i.time
                 else:
-                    status_di[status.description] = i.time
+                    day_di[i.status.description] = i.time
+                response[f'{i.day}-{i.month}-{i.year}'] = day_di    
+            else:
+                if day_di.get(i.status.description):
+                    day_di[i.status.description] += i.time
+                else:
+                    day_di[i.status.description] = i.time
+                response[f'{i.month}-{i.year}'] = day_di 
 
-            response[f'{i.day}{i.month}{i.year}'] = status_di
-        return Response(status_di, status=200)
+
+        return Response(response, status=200)
 
 
 

@@ -46,10 +46,26 @@ class GetDriverDayTestCase(APITestCase):
                 DriverLog.objects.create(
                     driver_id=driver,
                     company_id=self.company,
-                    status=choice(self.statuses),
+                    status=self.statuses[1],
                     day=day.day,
                     month=day.month,
-                    time=choice(range(1, 9))
+                    time=1
+                )
+                DriverLog.objects.create(
+                    driver_id=driver,
+                    company_id=self.company,
+                    status=self.statuses[3],
+                    day=day.day,
+                    month=day.month,
+                    time=2
+                )
+                DriverLog.objects.create(
+                    driver_id=driver,
+                    company_id=self.company,
+                    status=self.statuses[0],
+                    day=day.day,
+                    month=day.month,
+                    time=3
                 )
 
 
@@ -58,9 +74,13 @@ class GetDriverDayTestCase(APITestCase):
         data = {'month': self.month, 'day': 5}
         response = self.client.get(url, data=data)
         self.assertEqual(response.status_code, 200)
+        need_result = {'5-1-2000': {'sleep': 1, 'off': 2, 'work': 3}}
+        self.assertEqual(response.data, need_result)
 
     def test_get_month(self):
         url = reverse('driver_api_v1:get_driver_day', args=[self.drivers[1].id,])
         data = {'month': self.month}
         response = self.client.get(url, data=data)
         self.assertEqual(response.status_code, 200)
+        need_result = {'1-2000': {'sleep': 31, 'off': 62, 'work': 93}}
+        self.assertEqual(response.data, need_result)
